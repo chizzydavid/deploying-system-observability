@@ -1,0 +1,22 @@
+additionalPrometheusRulesMap: 
+  rule-name:
+    groups:
+    - name: flask_instance_alerts
+      rules:
+      - alert: Flask App Unreachable
+        expr: up{job='blackbox'}
+        for: 30s
+        labels:
+          severity: critical
+        annotations:
+          summary: "Flask App Instance [{{ $labels.instance }}] down"
+          description: "[{{ $labels.instance }}] of job [{{ $labels.job }}] has been down for more than 1 minute."
+    
+      - alert: Flask App CPU > 75%
+        expr: up{job='blackbox'}
+        for: 30s
+        labels:
+          severity: warning
+        annotations:
+          summary: "Flask Application [{{ $labels.instance }}] CPU utilization is above 75%"
+          description: "[{{ $labels.instance }}] of job [{{ $labels.job }}] is running above 75% CPU."
